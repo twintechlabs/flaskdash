@@ -76,7 +76,7 @@ See https://help.yahoo.com/kb/SLN27791.html
 Point your web browser to http://localhost:5000/
 
 You can make use of the following users:
-- email `user@example.com` with password `Password1`.
+- email `member@example.com` with password `Password1`.
 - email `admin@example.com` with password `Password1`.
 
 
