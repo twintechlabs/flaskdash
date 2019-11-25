@@ -65,7 +65,7 @@ See https://help.yahoo.com/kb/SLN27791.html
     fab init_db
 
 
-## Running the app
+## Running the app (development)
 
     # Start the Flask development web server
     python manage.py runserver
@@ -79,6 +79,12 @@ You can make use of the following users:
 - email `member@example.com` with password `Password1`.
 - email `admin@example.com` with password `Password1`.
 
+## Running the app (production)
+
+To run the application in production mode, gunicorn3 is used (and included in requirements.txt.
+
+    # Run the application in production mode
+    ./runserver.sh
 
 ## Running the automated tests
 
