@@ -11,7 +11,7 @@ Flask-Script==2.0.5
 Flask-SQLAlchemy==2.4.1
 Flask-BabelEx
 Flask-User
-Flask-WTF==0.14.1
+Flask-WTF==0.14.3
 
 # Automated tests
 pytest==3.0.5
