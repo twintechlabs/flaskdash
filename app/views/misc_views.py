@@ -42,8 +42,7 @@ def create_user_page():
         user = User.query.filter(User.email == request.form['email']).first()
         if not user:
             user = User(email=request.form['email'],
-                        first_name=request.form['first_name'],
-                        last_name=request.form['last_name'],
+                        full_name=request.form['full_name'],
                         password=current_app.user_manager.hash_password(request.form['password']),
                         active=True,
                         email_confirmed_at=datetime.datetime.utcnow())
