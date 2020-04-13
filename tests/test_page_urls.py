@@ -37,15 +37,15 @@ def test_page_urls(client):
     assert b"Member" in response.data
 
     response = client.post(url_for('main.user_profile_page'), follow_redirects=True,
-                           data=dict(name='First Last'))
+                           data=dict(full_name='First Last'))
     assert b"User Profile" in response.data
-    assert b"Full Name" in response.data
+    assert b"First Last" in response.data
     assert b"Member" not in response.data
 
     response = client.get(url_for('main.member_page'), follow_redirects=True)
     assert response.status_code==200
     assert b"User Profile" not in response.data
-    assert b"Full Name" not in response.data
+    assert b"First Last" not in response.data
     assert b"Traffic" in response.data
 
     # Logout
