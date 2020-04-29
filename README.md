@@ -104,14 +104,15 @@ However, if you really need sessions, FlaskDash has Flask-Session built in (http
 Sessions are available in misc_views.py and can be added to any additional controllers you create.
 
 This is how you might use it:
+
     # Session example
-    #    session['key'] = 'value'
-    #    val = session.get('key', 'not set')
-    #    print(val)
-    #    value    
-    #    val = session.get('butt', 'not set')
-    #    print(val)
-    #    not set
+    session['key'] = 'value'
+    val = session.get('key', 'not set')
+    print(val)
+    value    
+    val = session.get('butt', 'not set')
+    print(val)
+    not set
 
 ## Trouble shooting
 
