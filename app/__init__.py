@@ -7,12 +7,13 @@
 from datetime import datetime
 import os
 
-from flask import Flask
+from flask import Flask, session
 from flask_mail import Mail
 from flask_migrate import Migrate, MigrateCommand
 from flask_sqlalchemy import SQLAlchemy
 from flask_user import UserManager, UserMixin
 from flask_wtf.csrf import CSRFProtect
+from flask_session import Session
 
 # Instantiate Flask extensions
 db = SQLAlchemy()
@@ -45,6 +46,9 @@ def create_app(extra_config_settings={}):
 
     # Setup Flask-Mail
     mail.init_app(app)
+
+    # Setup session
+    Session(app)
 
     # Setup WTForms CSRFProtect
     csrf_protect.init_app(app)

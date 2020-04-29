@@ -1,4 +1,4 @@
-# FlaskDash starter app v1.2
+# FlaskDash starter app v1.3
 
 ![Screenshot](https://github.com/twintechlabs/flaskdash/blob/master/app/static/images/screenshot.png)
 
@@ -11,7 +11,7 @@ API code.
 
 ## Code characteristics
 
-* Tested on Python 2.6, 2.7, 3.3, 3.4, 3.5 and 3.6
+* Tested on Python 2.6, 2.7, 3.3, 3.4, 3.5, 3.6, and 3.7
 * Well organized directories with lots of comments
     * app
         * commands
@@ -95,6 +95,24 @@ To run the application in production mode, gunicorn3 is used (and included in re
     fab test
 
 
+## Using Server-side Sessions
+
+Don't use server side session data! You should do everything you can to keep each request/response stateless. It'll be easier to maintain your code and easier to debug when something goes wrong.  
+
+However, if you really need sessions, FlaskDash has Flask-Session built in (https://pythonhosted.org/Flask-Session/).  It is configured to use to the SQLAlchmey interface by default and the init_db command will set up a sessions table in your database.  You can change your configuration to use redis or MongoDB, as well.
+
+Sessions are available in misc_views.py and can be added to any additional controllers you create.
+
+This is how you might use it:
+    # Session example
+    #    session['key'] = 'value'
+    #    val = session.get('key', 'not set')
+    #    print(val)
+    #    value    
+    #    val = session.get('butt', 'not set')
+    #    print(val)
+    #    not set
+
 ## Trouble shooting
 
 If you make changes in the Models and run into DB schema issues, delete the sqlite DB file `app.sqlite`.
@@ -110,6 +128,7 @@ With thanks to the following Flask extensions:
 * [Flask-Migrate](https://flask-migrate.readthedocs.io/)
 * [Flask-Script](https://flask-script.readthedocs.io/)
 * [Flask-User](http://flask-user.readthedocs.io/en/v0.6/)
+* [Flask-Session](https://pythonhosted.org/Flask-Session/)
 
 <!-- Please consider leaving this line. Thank you -->
 [Flask-User-starter-app](https://github.com/lingthio/Flask-User-starter-app) was used as a starting point for this code repository.

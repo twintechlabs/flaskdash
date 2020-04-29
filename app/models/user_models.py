@@ -52,6 +52,15 @@ class Role(db.Model):
     label = db.Column(db.Unicode(255), server_default=u'')  # for display purposes
 
 
+class Session(db.Model):
+    __tablename__ = 'sessions'
+
+    id = db.Column(db.Integer, primary_key=True)
+    session_id = db.Column(db.String(255), unique=True)
+    data = db.Column(db.LargeBinary)
+    expiry = db.Column(db.DateTime)
+
+
 # Define the UserRoles association model
 class UsersRoles(db.Model):
     __tablename__ = 'users_roles'

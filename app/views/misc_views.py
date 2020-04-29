@@ -1,8 +1,9 @@
 # Copyright 2017 Twin Tech Labs. All rights reserved
 
-from flask import Blueprint, redirect, render_template, current_app
+from flask import Blueprint, redirect, render_template, current_app, session
 from flask import request, url_for, flash, send_from_directory, jsonify, render_template_string
 from flask_user import current_user, login_required, roles_accepted
+from flask_session import Session
 
 from app import db
 from app.models.user_models import UserProfileForm, User, UsersRoles
