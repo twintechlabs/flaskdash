@@ -110,7 +110,7 @@ This is how you might use it:
     val = session.get('key', 'not set')
     print(val)
     value    
-    val = session.get('butt', 'not set')
+    val = session.get('key2', 'not set')
     print(val)
     not set
 
