@@ -31,12 +31,8 @@
           <div class="card-body ">
                 {{ form.hidden_tag() }}
                 <div class="form-group ">
-                  <label for="nf-email ">First name</label>
-                  <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter first name" value="{{current_user.first_name}}">
-                </div>
-                <div class="form-group ">
-                  <label for="nf-password ">Last name</label>
-                  <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter last name" value="{{current_user.last_name}}">
+                  <label for="nf-email ">Full Name</label>
+                  <input type="text" class="form-control" id="full_name" name="full_name" placeholder="Enter full name" value="{{current_user.full_name}}">
                 </div>
           </div>
           <div class="card-footer ">

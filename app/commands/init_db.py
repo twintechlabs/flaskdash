@@ -35,8 +35,8 @@ def create_users():
     admin_role = find_or_create_role('admin', u'Admin')
 
     # Add users
-    user = find_or_create_user(u'Admin', u'Example', u'admin@example.com', 'Password1', admin_role)
-    user = find_or_create_user(u'Member', u'Example', u'member@example.com', 'Password1')
+    user = find_or_create_user(u'Admin Example', u'admin@example.com', 'Password1', admin_role)
+    user = find_or_create_user(u'Member Example', u'member@example.com', 'Password1')
 
     # Save to DB
     db.session.commit()
@@ -51,13 +51,12 @@ def find_or_create_role(name, label):
     return role
 
 
-def find_or_create_user(first_name, last_name, email, password, role=None):
+def find_or_create_user(full_name, email, password, role=None):
     """ Find existing user or create new user """
     user = User.query.filter(User.email == email).first()
     if not user:
         user = User(email=email,
-                    first_name=first_name,
-                    last_name=last_name,
+                    full_name=full_name,
                     password=current_app.user_manager.hash_password(password),
                     active=True,
                     email_confirmed_at=datetime.datetime.utcnow())
