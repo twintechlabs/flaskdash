@@ -15,6 +15,6 @@ controller2_blueprint = Blueprint('controller2', __name__, template_folder='temp
 @controller2_blueprint.route('/example', methods=['GET'])
 def sample_page():
 
-    return render_template('pages/controller2/example.html')
+    return render_template('views/controller2/example.html')
 
 

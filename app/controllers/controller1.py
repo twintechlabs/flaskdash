@@ -19,19 +19,19 @@ def member_page():
     if not current_user.is_authenticated:
         return redirect(url_for('user.login'))
 
-    return render_template('pages/misc/member_base.html')
+    return render_template('views/misc/member_base.html')
 
 # The Admin page is accessible to users with the 'admin' role
 @main_blueprint.route('/admin')
 @roles_accepted('admin')  # Limits access to users with the 'admin' role
 def admin_page():
-    return render_template('pages/admin/users.html')
+    return render_template('views/admin/users.html')
 
 @main_blueprint.route('/users')
 @roles_accepted('admin')
 def user_admin_page():
     users = User.query.all()
-    return render_template('pages/admin/users.html',
+    return render_template('views/admin/users.html',
         users=users)
 
 @main_blueprint.route('/create_user', methods=['GET', 'POST'])
@@ -50,7 +50,7 @@ def create_user_page():
             db.session.add(user)
             db.session.commit()
         return redirect(url_for('main.user_admin_page'))
-    return render_template('pages/admin/create_user.html',
+    return render_template('views/admin/create_user.html',
                            form=form)
 
 @main_blueprint.route('/delete_user', methods=['GET'])
@@ -69,7 +69,7 @@ def delete_user_page():
         flash('Opps!  Something unexpected happened.  On the brightside, we logged the error and will absolutely look at it and work to correct it, ASAP.', 'error')
         return redirect(request.referrer)
 
-@main_blueprint.route('/pages/profile', methods=['GET', 'POST'])
+@main_blueprint.route('/profile', methods=['GET', 'POST'])
 @login_required
 def user_profile_page():
     # Initialize form
@@ -87,6 +87,6 @@ def user_profile_page():
         return redirect(url_for('main.user_profile_page'))
 
     # Process GET or invalid POST
-    return render_template('pages/misc/user_profile_page.html',
+    return render_template('views/misc/user_profile_page.html',
                            current_user=current_user,
                            form=form)

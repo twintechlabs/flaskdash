@@ -54,9 +54,9 @@ def create_app(extra_config_settings={}):
     csrf_protect.init_app(app)
 
     # Register blueprints
-    from app.views.misc_views import main_blueprint
-    from app.views.apis import api_blueprint
-    from app.views.controller2 import controller2_blueprint
+    from app.controllers.controller1 import main_blueprint
+    from app.controllers.apis import api_blueprint
+    from app.controllers.controller2 import controller2_blueprint
     app.register_blueprint(main_blueprint)
     app.register_blueprint(api_blueprint)
     app.register_blueprint(controller2_blueprint)
@@ -75,7 +75,7 @@ def create_app(extra_config_settings={}):
 
     # Setup Flask-User to handle user account related forms
     from .models.user_models import User, MyRegisterForm
-    from .views.misc_views import user_profile_page
+    from .controllers.controller1 import user_profile_page
 
     user_manager = UserManager(app, db, User)
 
