@@ -56,14 +56,12 @@ def create_app(extra_config_settings={}):
     # Register blueprints
     from app.views.misc_views import main_blueprint
     from app.views.apis import api_blueprint
+    from app.views.controller2 import controller2_blueprint
     app.register_blueprint(main_blueprint)
     app.register_blueprint(api_blueprint)
+    app.register_blueprint(controller2_blueprint)
     csrf_protect.exempt(api_blueprint)
     
-    # Register blueprints
-    from app.views.misc_views import main_blueprint
-    app.register_blueprint(main_blueprint)
-
     # Define bootstrap_is_hidden_field for flask-bootstrap's bootstrap_wtf.html
     from wtforms.fields import HiddenField
 

@@ -12,7 +12,7 @@ import datetime
 # When using a Flask app factory we must use a blueprint to avoid needing 'app' for '@app.route'
 api_blueprint = Blueprint('api', __name__, template_folder='templates')
 
-@api_blueprint.route('/sample_call', methods=['POST'])
+@api_blueprint.route('/example', methods=['POST'])
 def sample_page():
 
     ret = {"sample return": 10}

@@ -66,6 +66,16 @@
                       </li>
                     </ul>
                   </li>
+                  <li class="nav-item nav-dropdown">
+                    <a class="nav-link nav-dropdown-toggle" href="#">
+                      <i class="nav-icon fa fa-cogs" aria-hidden="true"></i> Controller 2</a>
+                    <ul class="nav-dropdown-items">
+                      <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('controller2.sample_page') }}">
+                          <i class="nav-icon fa fa-book" aria-hidden="true" ></i>&nbsp;Example</a>
+                      </li>
+                    </ul>
+                  </li>                  
                   <li class="nav-title">Administration</li>
                   <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('main.user_admin_page') }}">
