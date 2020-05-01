@@ -15,10 +15,10 @@ API code.
 * Well organized directories with lots of comments
     * app
         * commands
+        * controllers
         * models
         * static
         * templates
-        * views
     * tests
 * Includes test framework (`py.test` and `tox`)
 * Includes database migration framework (`alembic`)
