@@ -19,7 +19,7 @@ def member_page():
     if not current_user.is_authenticated:
         return redirect(url_for('user.login'))
 
-    return render_template('views/misc/member_base.html')
+    return render_template('views/controller1/member_base.html')
 
 # The Admin page is accessible to users with the 'admin' role
 @main_blueprint.route('/admin')
@@ -87,6 +87,6 @@ def user_profile_page():
         return redirect(url_for('main.user_profile_page'))
 
     # Process GET or invalid POST
-    return render_template('views/misc/user_profile_page.html',
+    return render_template('views/controller1/user_profile_page.html',
                            current_user=current_user,
                            form=form)
