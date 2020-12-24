@@ -8,7 +8,7 @@
   <ol class="breadcrumb">
     <li class="breadcrumb-item">Home</li>
     <li class="breadcrumb-item">Admin</li>
-    <li class="breadcrumb-item active">Users</li>
+    <li class="breadcrumb-item"><a href="{{ url_for('main.user_admin_page') }}">Manage Users</a></li>
     <!-- Breadcrumb Menu-->
     <li class="breadcrumb-menu d-md-down-none">
       <div class="btn-group" role="group" aria-label="Button group">
@@ -27,7 +27,7 @@
       <div class="card ">
           <div class="card-header ">
             <strong>System Users</strong>
-            <a href={{ url_for('main.create_user_page') }} class="btn btn-pill btn-sm btn-primary pull-right">Create User</a>
+            <a href={{ url_for('main.create_or_edit_user_page') }} class="btn btn-pill btn-sm btn-primary pull-right">Create User</a>
           </div>
           <div class="card-body ">
             <table class="table table-hover table-striped" style="padding-top: 50px;">
@@ -43,7 +43,7 @@
               <tbody>
                 {% for user in users %}
                 <tr>
-                  <td>{{user.name()}}</td>
+                  <td><a href={{ url_for('main.create_or_edit_user_page', user_id=user.id) }}>{{user.name()}}</a></td>
                   <td>{{user.role()}}</td>
                   <td>{{user.email}}</td>
                   <td>{{user.email_confirmed_at}}</td>

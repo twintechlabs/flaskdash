@@ -7,8 +7,8 @@
   <ol class="breadcrumb">
     <li class="breadcrumb-item">Home</li>
     <li class="breadcrumb-item">Admin</li>
-    <li class="breadcrumb-item">Manage Users</li>
-    <li class="breadcrumb-item active">Create User</li>
+    <li class="breadcrumb-item"><a href="{{ url_for('main.user_admin_page') }}">Manage Users</a></li>
+    <li class="breadcrumb-item active">User</li>
     <!-- Breadcrumb Menu-->
     <li class="breadcrumb-menu d-md-down-none">
       <div class="btn-group" role="group" aria-label="Button group">
@@ -28,21 +28,22 @@
         <form action="" method="POST" class="form" role="form">
           <div class="card-header ">
             <strong>Create User</strong>
+            <a href="{{ url_for('main.manage_user_roles', user_id=user.id) }}" class="btn btn-sm btn-primary pull-right">Manage Roles</a> 
           </div>
           <div class="card-body ">
                 {{ form.hidden_tag() }}
                 <div class="form-group">
                     <label for="full_name">Full Name</label>
-                    <input type="text" class="form-control" id="full_name" name="full_name" placeholder="Enter full name" value="">
+                    <input type="text" class="form-control" id="full_name" name="full_name" placeholder="Enter full name" value="{{user.full_name}}">
                 </div>
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="text" class="form-control" id="email" name="email" placeholder="Enter an email address" value="">
+                    <input type="text" class="form-control" id="email" name="email" placeholder="Enter an email address" value="{{user.email}}">
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
                     <input type="text" class="form-control" id="password" name="password" placeholder="Enter password" value="">
-                </div>
+                </div>               
           </div>
           <div class="card-footer ">
             <button type="submit" class="btn btn-sm btn-primary "><i class="fa fa-dot-circle-o "></i> Submit</button>

@@ -1,0 +1,96 @@
+{% extends "common/dark_base.html" %}  {# common/page_base.html extends layout.html #}
+
+{% block content %}
+
+{% from "common/form_macros.html" import render_field, render_submit_field %}
+  <!-- Breadcrumb-->
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">Home</li>
+    <li class="breadcrumb-item">Admin</li>
+    <li class="breadcrumb-item"><a href="{{ url_for('main.user_admin_page') }}">Manage Users</a></li>
+    <li class="breadcrumb-item"><a href={{ url_for('main.create_or_edit_user_page', user_id=user.id) }}>{{user.name()}}</a></li>
+    <li class="breadcrumb-item active">Manage User Roles for {{ user.name() }}</li>
+    <!-- Breadcrumb Menu-->
+    <li class="breadcrumb-menu d-md-down-none">
+      <div class="btn-group" role="group" aria-label="Button group">
+        <a class="btn" href="#">
+          <i class="icon-speech"></i>
+        </a>
+        <a class="btn" href="./">
+          <i class="icon-graph"></i>  Dashboard</a>
+        <a class="btn" href="#">
+          <i class="icon-settings"></i>  Settings</a>
+      </div>
+    </li>
+  </ol>
+
+  <div class="container-fluid">
+    <div class="animated fadeIn">
+
+
+      <div class="card ">
+          <div class="card-header ">
+            <strong>Delete User Role from {{ user.name() }}</strong>
+          </div>
+          <div class="card-body ">
+                <table class="table table-striped table-bordered" style="background-color: white">
+                    <thead>
+                        <tr>
+                            <th class="text-uppercase"><strong>Assigned Roles</strong></th>
+                            <th class="text-uppercase"><strong>Actions</strong></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ur in user_roles %}
+                        <tr>
+                            <td align="center">{{ ur.label }}</td>
+                            <td align="center">
+                              <a href="{{ url_for('main.manage_user_roles', user_id=user.id, role_id=ur.id) }}" class="btn btn-warning">Remove</a>                    
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>  
+          </div>         
+          <div class="card-footer ">
+
+          </div>
+      </div>
+
+      <div class="card ">
+        <form action="" method="POST" class="form" role="form">
+          <div class="card-header ">
+            <strong>Add User Role to {{ user.name() }}</strong>
+          </div>
+          <div class="card-body ">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    <label for="role">Role(s):</label>
+                      <select class="form-control" id="role" name="role">
+                      {% if roles %}
+                        {% for role in roles %}
+                          {% if not (role in user_roles) %}
+                          <option value="{{ role.name }}">{{ role.label }}</option>
+                          {% endif %}
+                        {% endfor %}
+                      {% else %}
+                      {% endif %} 
+                    </select>  
+                </div>   
+                            
+          </div>
+          <div class="card-footer ">
+            <button type="submit" class="btn btn-sm btn-primary "><i class="fa fa-dot-circle-o "></i> Submit</button>
+            <button type="reset" class="btn btn-sm btn-danger "><i class="fa fa-ban "></i> Reset</button>
+          </div>
+        </form>
+      </div>
+</div>
+<script>
+$( document ).ready(function() {
+  //  $('option[value="{{user.role()}}"]').prop("selected", true);
+  //  $('[name=customer_id]').val( '{{user.customer_id}}' );
+  //  $('[name=provider_id]').val( '{{user.provider_id}}' );
+});
+</script>
+{% endblock %}

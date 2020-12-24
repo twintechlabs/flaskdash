@@ -6,7 +6,7 @@ from flask_user import current_user, login_required, roles_accepted
 from flask_session import Session
 
 from app import db
-from app.models.user_models import UserProfileForm, User, UsersRoles
+from app.models.user_models import UserProfileForm, User, UsersRoles, Role
 import uuid, json, os
 import datetime
 
@@ -34,24 +34,80 @@ def user_admin_page():
     return render_template('views/admin/users.html',
         users=users)
 
-@main_blueprint.route('/create_user', methods=['GET', 'POST'])
+@main_blueprint.route('/create_or_edit_user', methods=['GET', 'POST'])
 @roles_accepted('admin')
-def create_user_page():
+def create_or_edit_user_page():
     form = UserProfileForm(request.form, obj=current_user)
+    roles = Role.query.all()
+    user_id = request.args.get('user_id')
+    user = User()
+
+    if user_id:
+        user = User.query.filter(User.id == user_id).first()
 
     if request.method == 'POST':
-        user = User.query.filter(User.email == request.form['email']).first()
-        if not user:
-            user = User(email=request.form['email'],
-                        full_name=request.form['full_name'],
-                        password=current_app.user_manager.hash_password(request.form['password']),
-                        active=True,
-                        email_confirmed_at=datetime.datetime.utcnow())
-            db.session.add(user)
-            db.session.commit()
-        return redirect(url_for('main.user_admin_page'))
-    return render_template('views/admin/create_user.html',
-                           form=form)
+        if user.id is None:
+            user = User.query.filter(User.email == request.form['email']).first()
+            if not user:
+                user = User(email=request.form['email'],
+                            full_name=request.form['full_name'],
+                            password=current_app.user_manager.hash_password(request.form['password']),
+                            active=True,
+                            email_confirmed_at=datetime.datetime.utcnow())
+                db.session.add(user)
+                db.session.commit()
+            return redirect(url_for('main.user_admin_page'))
+        else:
+            user.email = request.form['email']
+            user.full_name = request.form['full_name']
+            if request.form['password'] is not None and request.form['password'] is not "":
+                user.password = current_app.user_manager.hash_password(request.form['password'])    
+            db.session.commit()        
+    return render_template('views/admin/edit_user.html',
+                           form=form,
+                           roles=roles,
+                           user=user)
+
+@main_blueprint.route('/manage_user_roles', methods=['GET', 'POST'])
+@roles_accepted('admin')
+def manage_user_roles():
+    user_id = request.args.get('user_id')
+    role_id = request.args.get('role_id')
+
+    if user_id and role_id:
+        user_id = int(user_id)
+        role_id = int(role_id)
+        db.session.query(UsersRoles).filter_by(user_id = user_id).filter_by(role_id = role_id).delete()
+        db.session.commit()
+    # Initialize form
+    user_roles = list()
+    if user_id is not None:
+        user_id = int (user_id)
+        user = User.query.filter_by(id=user_id).first()
+        user_roles = user.roles
+
+    form = UserProfileForm(request.form, obj=user)
+    
+    roles = db.session.query(Role).all()
+    if request.method == 'POST':
+
+        form.populate_obj(user) 
+        if str(request.form['role']): 
+            role = Role.query.filter(Role.name == str(request.form['role'])).first()
+            user.roles.append(role)   
+            db.session.commit()           
+            flash('You successfully added a role to user '  + user.name() + ' !', 'success')  
+        else:
+            #user.roles = []  
+            # print(f' Not appending role ') 
+            flash('You failed to add a role to user '  + user.name() + ' !', 'failure')
+            pass               
+        
+    return render_template('views/admin/manage_user_roles.html',
+                            user=user,
+                            roles=roles,
+                            user_roles=user_roles,
+                            form=form)
 
 @main_blueprint.route('/delete_user', methods=['GET'])
 @roles_accepted('admin')
