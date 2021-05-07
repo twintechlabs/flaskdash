@@ -36,7 +36,7 @@
   },
   "description": "[![npm version](https://badge.fury.io/js/flag-icon-css.svg)](https://badge.fury.io/js/flag-icon-css) [![Bower version](https://badge.fury.io/bo/flag-icon-css.svg)](https://badge.fury.io/bo/flag-icon-css)",
   "devDependencies": {
-    "grunt": "1.0.2",
+    "grunt": "1.3.0",
     "grunt-contrib-connect": "1.0.2",
     "grunt-contrib-cssmin": "2.2.1",
     "grunt-contrib-less": "1.4.1",
