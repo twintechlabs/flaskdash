@@ -2,7 +2,7 @@
 # Usage: pip install -r requirements.txt
 
 # Flask Framework
-Flask==1.1.1
+Flask==2.0.3
 
 # Flask Packages
 Flask-Login==0.4.1
