@@ -6,8 +6,15 @@ from flask_user import UserMixin
 from flask_user.forms import RegisterForm
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators
+from sqlalchemy import event
 from app import db
 
+# Define the Role data model
+class Role(db.Model):
+    __tablename__ = 'roles'
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(50), nullable=False, server_default=u'', unique=True)  # for @roles_accepted()
+    label = db.Column(db.Unicode(255), server_default=u'')  # for display purposes
 
 # Define the User data model. Make sure to add the flask_user.UserMixin !!
 class User(db.Model, UserMixin):
@@ -41,15 +48,6 @@ class User(db.Model, UserMixin):
 
     def name(self):
         return str(self.full_name)
-
-
-# Define the Role data model
-class Role(db.Model):
-    __tablename__ = 'roles'
-    id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(50), nullable=False, server_default=u'', unique=True)  # for @roles_accepted()
-    label = db.Column(db.Unicode(255), server_default=u'')  # for display purposes
-
 
 class Session(db.Model):
     __tablename__ = 'sessions'

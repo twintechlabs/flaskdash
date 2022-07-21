@@ -1,4 +1,4 @@
-# FlaskDash starter app v1.5
+# FlaskDash starter app v1.6
 
 ![Screenshot](https://github.com/twintechlabs/flaskdash/blob/master/app/static/images/screenshot.png)
 
