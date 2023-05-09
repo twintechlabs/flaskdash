@@ -11,7 +11,7 @@ API code.
 
 ## Code characteristics
 
-* Tested on Python 2.6, 2.7, 3.3, 3.4, 3.5, 3.6, and 3.7
+* Tested on Python 2.6, 2.7, 3.3, 3.4, 3.5, 3.6, 3.7, and 3.8
 * Well organized directories with lots of comments
     * app
         * commands
