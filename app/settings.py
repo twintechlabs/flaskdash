@@ -14,16 +14,14 @@ CSRF_ENABLED = True
 # Flask-SQLAlchemy settings
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-# Flask-User settings
-USER_APP_NAME = APP_NAME
-USER_ENABLE_CHANGE_PASSWORD = True  # Allow users to change their password
-USER_ENABLE_CHANGE_USERNAME = False  # Allow users to change their username
-USER_ENABLE_CONFIRM_EMAIL = True  # Force users to confirm their email
-USER_ENABLE_FORGOT_PASSWORD = True  # Allow users to reset their passwords
-USER_ENABLE_EMAIL = True  # Register with Email
-USER_ENABLE_REGISTRATION = True  # Allow new users to register
-USER_REQUIRE_RETYPE_PASSWORD = True  # Prompt for `retype password` in:
-USER_ENABLE_USERNAME = False  # Register and Login with username
-USER_AFTER_LOGIN_ENDPOINT = 'main.member_page'
-USER_AFTER_LOGOUT_ENDPOINT = 'main.member_page'
-USER_ALLOW_LOGIN_WITHOUT_CONFIRMED_EMAIL = False
+# Flask-Security settings
+SECURITY_REGISTERABLE = True
+SECURITY_CONFIRMABLE = False         # Set True to require email confirmation
+SECURITY_RECOVERABLE = True          # Allow password reset via email
+SECURITY_CHANGEABLE = True           # Allow users to change their password
+SECURITY_SEND_REGISTER_EMAIL = False # Set True to send confirmation emails
+SECURITY_POST_LOGIN_VIEW = 'main.member_page'
+SECURITY_POST_LOGOUT_VIEW = 'main.member_page'
+SECURITY_EMAIL_VALIDATOR_ARGS = {"check_deliverability": False}
+SECURITY_MSG_LOGGED_IN = ("You have signed in successfully", "success")
+SECURITY_MSG_LOGGED_OUT = ("You have signed out successfully.", "info")

@@ -1,0 +1,15 @@
+[2026-03-19 12:03:27 -0400] [14576] [INFO] Starting gunicorn 23.0.0
+[2026-03-19 12:03:27 -0400] [14576] [INFO] Listening at: http://0.0.0.0:5000 (14576)
+[2026-03-19 12:03:27 -0400] [14576] [INFO] Using worker: sync
+[2026-03-19 12:03:27 -0400] [14577] [INFO] Booting worker with pid: 14577
+[2026-03-19 12:03:27 -0400] [14578] [INFO] Booting worker with pid: 14578
+[2026-03-19 12:03:27 -0400] [14579] [INFO] Booting worker with pid: 14579
+[2026-03-19 12:03:27 -0400] [14580] [INFO] Booting worker with pid: 14580
+/home/matt/projects/flaskdash/.venv/lib/python3.13/site-packages/passlib/pwd.py:16: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/home/matt/projects/flaskdash/.venv/lib/python3.13/site-packages/passlib/pwd.py:16: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/home/matt/projects/flaskdash/.venv/lib/python3.13/site-packages/passlib/pwd.py:16: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/home/matt/projects/flaskdash/.venv/lib/python3.13/site-packages/passlib/pwd.py:16: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources

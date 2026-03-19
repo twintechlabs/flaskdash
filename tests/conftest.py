@@ -11,12 +11,16 @@ from app import create_app, db as the_db
 
 # Initialize the Flask-App with test-specific settings
 the_app = create_app(dict(
-    TESTING=True,  # Propagate exceptions
-    LOGIN_DISABLED=False,  # Enable @register_required
-    MAIL_SUPPRESS_SEND=True,  # Disable Flask-Mail send
-    SERVER_NAME='localhost',  # Enable url_for() without request context
+    TESTING=True,                              # Propagate exceptions
+    LOGIN_DISABLED=False,                      # Enable @login_required
+    MAIL_SUPPRESS_SEND=True,                   # Disable Flask-Mail send
+    SERVER_NAME='localhost',                   # Enable url_for() without request context
     SQLALCHEMY_DATABASE_URI='sqlite:///:memory:',  # In-memory SQLite DB
-    WTF_CSRF_ENABLED=False,  # Disable CSRF form validation
+    WTF_CSRF_ENABLED=False,                    # Disable CSRF form validation
+    SECURITY_PASSWORD_SALT='test-salt',        # Required by Flask-Security-Too
+    SECURITY_WTF_CSRF_ENABLED=False,           # Disable CSRF for Flask-Security-Too forms
+    SESSION_TYPE='filesystem',                 # Use filesystem sessions so flash messages survive redirects in tests
+    SESSION_FILE_DIR='/tmp/flaskdash_test_sessions',
 ))
 
 # Setup an application context (since the tests run outside of the webserver context)
@@ -38,26 +42,15 @@ def db():
     """ Makes the 'db' parameter available to test functions. """
     return the_db
 
+
 @pytest.fixture(scope='function')
 def session(db, request):
     """Creates a new database session for a test."""
-    connection = db.engine.connect()
-    transaction = connection.begin()
+    db.session.begin_nested()
+    yield db.session
+    db.session.rollback()
 
-    options = dict(bind=connection, binds={})
-    session = db.create_scoped_session(options=options)
-
-    db.session = session
-
-    def teardown():
-        transaction.rollback()
-        connection.close()
-        session.remove()
-
-    request.addfinalizer(teardown)
-    return session
 
 @pytest.fixture(scope='session')
 def client(app):
     return app.test_client()
-

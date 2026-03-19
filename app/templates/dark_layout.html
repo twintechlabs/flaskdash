@@ -39,7 +39,7 @@
             <a class="navbar-brand" href="{{ url_for('main.member_page') }}">
               FlaskDash
             </a>
-            <a class="nav-link nav-link--rounded pull-right" style="margin-right: 10px;" href="{{ url_for('user.logout') }}">
+            <a class="nav-link nav-link--rounded pull-right" style="margin-right: 10px;" href="{{ url_for('security.logout') }}">
               Sign out
             </a>
           </header>
@@ -62,7 +62,7 @@
                           <i class="nav-icon icon-drop"></i> Profile</a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('user.change_password') }}">
+                        <a class="nav-link" href="{{ url_for('security.change_password') }}">
                           <i class="nav-icon icon-drop"></i> Password</a>
                       </li>
                     </ul>

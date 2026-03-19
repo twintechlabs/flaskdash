@@ -1,17 +1,17 @@
-# FlaskDash starter app v1.7
+# FlaskDash starter app v2.0
 
 ![Screenshot](https://github.com/twintechlabs/flaskdash/blob/master/app/static/images/screenshot.png)
 
-This code base serves as starting point for writing your next Flask application.
+This code base serves as a starting point for writing your next Flask application.
 
-It's based on the awesome work of the Ling Thio and includes the open source
-CoreUI admin BootStrap theme and a number of enhancements to the base Flask
-Starter app including adding basic user management and a separate view file for
+It's based on the awesome work of Ling Thio and includes the open source
+CoreUI admin Bootstrap theme and a number of enhancements to the base Flask
+starter app including basic user management and a separate view file for
 API code.
 
 ## Code characteristics
 
-* Tested on Python 2.6, 2.7, 3.3, 3.4, 3.5, 3.6, 3.7, and 3.8
+* Tested on Python 3.13
 * Well organized directories with lots of comments
     * app
         * commands
@@ -20,120 +20,124 @@ API code.
         * static
         * templates
     * tests
-* Includes test framework (`py.test` and `tox`)
-* Includes database migration framework (`alembic`)
+* Includes test framework (`pytest` and `tox`)
+* Includes database migration framework (`Flask-Migrate` / `alembic`)
 * Sends error emails to admins for unhandled exceptions
 
 
 ## Setting up a development environment
 
-We assume that you have `git` and `virtualenv` and `virtualenvwrapper` installed.
+We assume that you have `git` and Python 3.13 installed.
 
     # Clone the code repository into ~/dev/my_app
     mkdir -p ~/dev
     cd ~/dev
     git clone https://github.com/twintechlabs/flaskdash.git my_app
 
-    # Create the 'my_app' virtual environment
-    mkvirtualenv -p PATH/TO/PYTHON my_app
+    # Create a virtual environment and activate it
+    cd ~/dev/my_app
+    python3.13 -m venv .venv
+    source .venv/bin/activate
 
     # Install required Python packages
-    cd ~/dev/my_app
-    workon my_app
     pip install -r requirements.txt
 
 
-# Configuring SMTP
+## Configuring SMTP
 
-Edit the `local_settings.py` file.
+Edit the `app/local_settings.py` file and set the `MAIL_...` settings to match
+your SMTP provider.
 
-Specifically set all the MAIL_... settings to match your SMTP settings
-
-Note that Google's SMTP server requires the configuration of "less secure apps".
-See https://support.google.com/accounts/answer/6010255?hl=en
-
-Note that Yahoo's SMTP server requires the configuration of "Allow apps that use less secure sign in".
-See https://help.yahoo.com/kb/SLN27791.html
+You should also set a strong, unique value for `SECURITY_PASSWORD_SALT` in
+`local_settings.py`. Do not use the default value in production.
 
 
 ## Initializing the Database
 
     # Create DB tables and populate the roles and users tables
-    python manage.py init_db
-
-    # Or if you have Fabric installed:
-    fab init_db
+    flask init-db
 
 
 ## Running the app (development)
 
     # Start the Flask development web server
-    python manage.py runserver
-
-    # Or if you have Fabric installed:
-    fab runserver
+    flask run
 
 Point your web browser to http://localhost:5000/
 
-You can make use of the following users:
-- email `member@example.com` with password `Password1`.
-- email `admin@example.com` with password `Password1`.
+You can make use of the following seed users:
+- email `member@example.com` with password `Password1`
+- email `admin@example.com` with password `Password1`
+
 
 ## Running the app (production)
 
-To run the application in production mode, gunicorn3 is used (and included in requirements.txt.
+Gunicorn is included in `requirements.txt`. To run in production:
 
-    # Run the application in production mode
-    ./runserver.sh
+    gunicorn --bind 0.0.0.0:5000 "app:create_app()"
+
+Or use `unicorn.py` as the entry point:
+
+    gunicorn unicorn:app
+
+
+## Database migrations
+
+When you change a model, generate and apply a migration:
+
+    flask db migrate -m "Description of change"
+    flask db upgrade
+
+If you are upgrading an existing database from v1.x, you must run a migration
+to add the `fs_uniquifier` column required by Flask-Security-Too:
+
+    flask db migrate -m "Add fs_uniquifier to users"
+    flask db upgrade
+
 
 ## Running the automated tests
 
-    # Start the Flask development web server
-    py.test tests/
+    pytest tests/
 
-    # Or if you have Fabric installed:
-    fab test
+    # With coverage:
+    pytest tests/ --cov=app
 
 
 ## Using Server-side Sessions
 
-Don't use server side session data! You should do everything you can to keep each request/response stateless. It'll be easier to maintain your code and easier to debug when something goes wrong.  
+FlaskDash has Flask-Session built in, configured to use the SQLAlchemy backend
+by default. The sessions table is created automatically by `flask init-db`.
 
-However, if you really need sessions, FlaskDash has Flask-Session built in (https://pythonhosted.org/Flask-Session/).  It is configured to use to the SQLAlchmey interface by default and the init_db command will set up a sessions table in your database.  You can change your configuration to use redis or MongoDB, as well.
+You can change the backend in `local_settings.py` by setting `SESSION_TYPE`
+to `redis`, `filesystem`, or other supported backends.
 
-Sessions are available in misc_views.py and can be added to any additional controllers you create.
+Usage example:
 
-This is how you might use it:
-
-    # Session example
     session['key'] = 'value'
     val = session.get('key', 'not set')
-    print(val)
-    value    
-    val = session.get('key2', 'not set')
-    print(val)
-    not set
+
 
 ## Trouble shooting
 
-If you make changes in the Models and run into DB schema issues, delete the sqlite DB file `app.sqlite`.
+If you make changes to models and run into DB schema issues during development,
+delete the SQLite DB file `app.sqlite` and re-run `flask init-db`.
 
 
-## Acknowledgements
+## Key dependencies
 
-With thanks to the following Flask extensions:
 * [CoreUI](https://coreui.io/)
-* [Alembic](http://alembic.zzzcomputing.com/)
-* [Flask](http://flask.pocoo.org/)
+* [Flask](https://flask.palletsprojects.com/)
 * [Flask-Login](https://flask-login.readthedocs.io/)
 * [Flask-Migrate](https://flask-migrate.readthedocs.io/)
-* [Flask-Script](https://flask-script.readthedocs.io/)
-* [Flask-User](http://flask-user.readthedocs.io/en/v0.6/)
-* [Flask-Session](https://pythonhosted.org/Flask-Session/)
+* [Flask-Security-Too](https://flask-security-too.readthedocs.io/)
+* [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/)
+* [Flask-Session](https://flask-session.readthedocs.io/)
+* [Flask-WTF](https://flask-wtf.readthedocs.io/)
 
-<!-- Please consider leaving this line. Thank you -->
-[Flask-User-starter-app](https://github.com/lingthio/Flask-User-starter-app) was used as a starting point for this code repository.
 
 ## Authors
 - Matt Hogan - matt AT twintechlabs DOT io
 - Ling Thio -- ling.thio AT gmail DOT com
+
+<!-- Please consider leaving this line. Thank you -->
+[Flask-User-starter-app](https://github.com/lingthio/Flask-User-starter-app) was used as a starting point for this code repository.

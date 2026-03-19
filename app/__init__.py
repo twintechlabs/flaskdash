@@ -1,17 +1,14 @@
 # __init__.py is a special Python file that allows a directory to become
 # a Python package so it can be accessed using the 'import' statement.
 
-# __init__.py is a special Python file that allows a directory to become
-# a Python package so it can be accessed using the 'import' statement.
-
 from datetime import datetime
 import os
 
 from flask import Flask, session
 from flask_mail import Mail
-from flask_migrate import Migrate, MigrateCommand
+from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-from flask_user import UserManager, UserMixin
+from flask_security import Security, SQLAlchemyUserDatastore
 from flask_wtf.csrf import CSRFProtect
 from flask_session import Session
 
@@ -23,8 +20,7 @@ migrate = Migrate()
 
 
 def create_app(extra_config_settings={}):
-    """Create a Flask applicaction.
-    """
+    """Create a Flask application."""
     # Instantiate Flask
     app = Flask(__name__)
 
@@ -47,7 +43,8 @@ def create_app(extra_config_settings={}):
     # Setup Flask-Mail
     mail.init_app(app)
 
-    # Setup session
+    # Setup Flask-Session
+    app.config['SESSION_SQLALCHEMY'] = db
     Session(app)
 
     # Setup WTForms CSRFProtect
@@ -61,7 +58,7 @@ def create_app(extra_config_settings={}):
     app.register_blueprint(api_blueprint)
     app.register_blueprint(controller2_blueprint)
     csrf_protect.exempt(api_blueprint)
-    
+
     # Define bootstrap_is_hidden_field for flask-bootstrap's bootstrap_wtf.html
     from wtforms.fields import HiddenField
 
@@ -73,11 +70,14 @@ def create_app(extra_config_settings={}):
     # Setup an error-logger to send emails to app.config.ADMINS
     init_email_error_handler(app)
 
-    # Setup Flask-User to handle user account related forms
-    from .models.user_models import User, MyRegisterForm
-    from .controllers.controller1 import user_profile_page
+    # Setup Flask-Security
+    from .models.user_models import User, Role, ExtendedRegisterForm
+    user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+    app.extensions['security'] = Security(app, user_datastore, register_form=ExtendedRegisterForm)
 
-    user_manager = UserManager(app, db, User)
+    # Register CLI commands
+    from app.commands.init_db import init_db_command
+    app.cli.add_command(init_db_command)
 
     return app
 
@@ -115,9 +115,3 @@ def init_email_error_handler(app):
     )
     mail_handler.setLevel(logging.ERROR)
     app.logger.addHandler(mail_handler)
-
-    # Log errors using: app.logger.error('Some error message')
-
-
-
-

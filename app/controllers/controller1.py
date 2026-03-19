@@ -2,8 +2,7 @@
 
 from flask import Blueprint, redirect, render_template, current_app, session
 from flask import request, url_for, flash, send_from_directory, jsonify, render_template_string
-from flask_user import current_user, login_required, roles_accepted
-from flask_session import Session
+from flask_security import current_user, login_required, roles_accepted, hash_password
 
 from app import db
 from app.models.user_models import UserProfileForm, User, UsersRoles, Role
@@ -17,7 +16,7 @@ main_blueprint = Blueprint('main', __name__, template_folder='templates')
 @main_blueprint.route('/')
 def member_page():
     if not current_user.is_authenticated:
-        return redirect(url_for('user.login'))
+        return redirect(url_for('security.login'))
 
     return render_template('views/controller1/member_base.html')
 
@@ -30,7 +29,7 @@ def admin_page():
 @main_blueprint.route('/users')
 @roles_accepted('admin')
 def user_admin_page():
-    users = User.query.all()
+    users = db.session.execute(db.select(User)).scalars().all()
     return render_template('views/admin/users.html',
         users=users)
 
@@ -38,31 +37,31 @@ def user_admin_page():
 @roles_accepted('admin')
 def create_or_edit_user_page():
     form = UserProfileForm(request.form, obj=current_user)
-    roles = Role.query.all()
+    roles = db.session.execute(db.select(Role)).scalars().all()
     user_id = request.args.get('user_id')
     user = User()
 
     if user_id:
-        user = User.query.filter(User.id == user_id).first()
+        user = db.session.execute(db.select(User).filter_by(id=user_id)).scalar_one_or_none()
 
     if request.method == 'POST':
         if user.id is None:
-            user = User.query.filter(User.email == request.form['email']).first()
+            user = db.session.execute(db.select(User).filter_by(email=request.form['email'])).scalar_one_or_none()
             if not user:
                 user = User(email=request.form['email'],
                             full_name=request.form['full_name'],
-                            password=current_app.user_manager.hash_password(request.form['password']),
+                            password=hash_password(request.form['password']),
                             active=True,
-                            email_confirmed_at=datetime.datetime.utcnow())
+                            email_confirmed_at=datetime.datetime.now(datetime.timezone.utc))
                 db.session.add(user)
                 db.session.commit()
             return redirect(url_for('main.user_admin_page'))
         else:
             user.email = request.form['email']
             user.full_name = request.form['full_name']
-            if request.form['password'] is not None and request.form['password'] is not "":
-                user.password = current_app.user_manager.hash_password(request.form['password'])    
-            db.session.commit()        
+            if request.form.get('password'):
+                user.password = hash_password(request.form['password'])
+            db.session.commit()
     return render_template('views/admin/edit_user.html',
                            form=form,
                            roles=roles,
@@ -77,32 +76,28 @@ def manage_user_roles():
     if user_id and role_id:
         user_id = int(user_id)
         role_id = int(role_id)
-        db.session.query(UsersRoles).filter_by(user_id = user_id).filter_by(role_id = role_id).delete()
+        db.session.execute(db.delete(UsersRoles).filter_by(user_id=user_id, role_id=role_id))
         db.session.commit()
-    # Initialize form
+
     user_roles = list()
     if user_id is not None:
-        user_id = int (user_id)
-        user = User.query.filter_by(id=user_id).first()
+        user_id = int(user_id)
+        user = db.session.execute(db.select(User).filter_by(id=user_id)).scalar_one_or_none()
         user_roles = user.roles
 
     form = UserProfileForm(request.form, obj=user)
-    
-    roles = db.session.query(Role).all()
-    if request.method == 'POST':
+    roles = db.session.execute(db.select(Role)).scalars().all()
 
-        form.populate_obj(user) 
-        if str(request.form['role']): 
-            role = Role.query.filter(Role.name == str(request.form['role'])).first()
-            user.roles.append(role)   
-            db.session.commit()           
-            flash('You successfully added a role to user '  + user.name() + ' !', 'success')  
+    if request.method == 'POST':
+        form.populate_obj(user)
+        if str(request.form['role']):
+            role = db.session.execute(db.select(Role).filter_by(name=str(request.form['role']))).scalar_one_or_none()
+            user.roles.append(role)
+            db.session.commit()
+            flash('You successfully added a role to user ' + user.name() + ' !', 'success')
         else:
-            #user.roles = []  
-            # print(f' Not appending role ') 
-            flash('You failed to add a role to user '  + user.name() + ' !', 'failure')
-            pass               
-        
+            flash('You failed to add a role to user ' + user.name() + ' !', 'failure')
+
     return render_template('views/admin/manage_user_roles.html',
                             user=user,
                             roles=roles,
@@ -115,8 +110,8 @@ def delete_user_page():
     try:
         user_id = request.args.get('user_id')
 
-        db.session.query(UsersRoles).filter_by(user_id = user_id).delete()
-        db.session.query(User).filter_by(id = user_id).delete()
+        db.session.execute(db.delete(UsersRoles).filter_by(user_id=user_id))
+        db.session.execute(db.delete(User).filter_by(id=user_id))
         db.session.commit()
 
         flash('You successfully deleted your user!', 'success')

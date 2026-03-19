@@ -1,22 +1,8 @@
-"""This file sets up a command line manager.
+"""manage.py is no longer used. Flask-Script has been replaced by Flask's built-in CLI.
 
-Use "python manage.py" for a list of available commands.
-Use "python manage.py runserver" to start the development web server on localhost:5000.
-Use "python manage.py runserver --help" for additional runserver options.
+Available commands:
+  flask run              # Start the development server
+  flask init-db          # Initialize the database with seed data
+  flask db migrate       # Generate a new database migration
+  flask db upgrade       # Apply database migrations
 """
-
-from flask_migrate import MigrateCommand
-from flask_script import Manager
-
-from app import create_app
-from app.commands import InitDbCommand
-
-# Setup Flask-Script with command line commands
-manager = Manager(create_app)
-manager.add_command('db', MigrateCommand)
-manager.add_command('init_db', InitDbCommand)
-
-if __name__ == "__main__":
-    # python manage.py                      # shows available commands
-    # python manage.py runserver --help     # shows available runserver options
-    manager.run()
