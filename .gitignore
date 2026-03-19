@@ -114,3 +114,5 @@ ENV/
 # --------------------------------
 
 app.sqlite
+nohup.out
+/tmp/flaskdash_test_sessions/
