@@ -1,127 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Twin Tech Labs - CoreUI Flask Admin</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>FlaskDash</title>
 
-        <!-- Place favicon.ico and apple-touch-icon(s) in the root directory -->
-        <link rel="shortcut icon" href="images/favicon.ico">
+    <!-- Vendors styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/vendors/simplebar.css') }}">
+    <!-- Main styles -->
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
 
-        <!-- stylesheets -->
-        <link href="{{ url_for('static', filename='css/flag-icon-css/css/flag-icon.min.css') }}" rel="stylesheet">
-        <link href="{{ url_for('static', filename='css/font-awesome/css/all.min.css') }}" rel="stylesheet">
-        <link href="{{ url_for('static', filename='css/simple-line-icons/css/simple-line-icons.css') }}" rel="stylesheet">
-        <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <script src="{{ url_for('static', filename='js/config.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/color-modes.js') }}"></script>
+  </head>
+  <body>
+    {% block body %}
 
-        <!-- javascript -->
-        <script src="{{ url_for('static', filename='js/popper.js/dist/umd/popper.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/jquery-3.6.4.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/pace-progress/pace.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/perfect-scrollbar/dist/perfect-scrollbar.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/@coreui/coreui/dist/js/coreui.min.js') }}"></script>
+    <!-- Sidebar -->
+    <div class="sidebar sidebar-dark sidebar-fixed border-end" id="sidebar">
+      <div class="sidebar-header border-bottom">
+        <div class="sidebar-brand">FlaskDash</div>
+        <button class="btn-close d-lg-none" type="button" aria-label="Close"
+          onclick="coreui.Sidebar.getInstance(document.querySelector('#sidebar')).toggle()"></button>
+      </div>
+      <ul class="sidebar-nav" data-coreui="navigation" data-simplebar>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('main.member_page') }}">
+            <svg class="nav-icon"><use href="{{ url_for('static', filename='icons/free.svg') }}#cil-speedometer"></use></svg>
+            Dashboard
+          </a>
+        </li>
+        <li class="nav-group">
+          <a class="nav-link nav-group-toggle" href="#">
+            <svg class="nav-icon"><use href="{{ url_for('static', filename='icons/free.svg') }}#cil-user"></use></svg>
+            My Account
+          </a>
+          <ul class="nav-group-items compact">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('main.user_profile_page') }}">
+                <span class="nav-icon"><span class="nav-icon-bullet"></span></span>
+                Profile
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('security.change_password') }}">
+                <span class="nav-icon"><span class="nav-icon-bullet"></span></span>
+                Password
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-group">
+          <a class="nav-link nav-group-toggle" href="#">
+            <svg class="nav-icon"><use href="{{ url_for('static', filename='icons/free.svg') }}#cil-layers"></use></svg>
+            Controller 2
+          </a>
+          <ul class="nav-group-items compact">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('controller2.sample_page') }}">
+                <span class="nav-icon"><span class="nav-icon-bullet"></span></span>
+                Example
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-title">Administration</li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('main.user_admin_page') }}">
+            <svg class="nav-icon"><use href="{{ url_for('static', filename='icons/free.svg') }}#cil-people"></use></svg>
+            Manage Users
+          </a>
+        </li>
+      </ul>
+      <div class="sidebar-footer border-top d-none d-md-flex">
+        <button class="sidebar-toggler" type="button" data-coreui-toggle="unfoldable"></button>
+      </div>
+    </div>
 
-        <script src="{{ url_for('static', filename='js/highcharts.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/exporting.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/export-data.js') }}"></script>
-    </head>
-    <body>
-        {% block body %}
-        <div class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
-          <header class="app-header navbar">
-            <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <a class="navbar-brand" href="{{ url_for('main.member_page') }}">
-              FlaskDash
-            </a>
-            <a class="nav-link nav-link--rounded pull-right" style="margin-right: 10px;" href="{{ url_for('security.logout') }}">
-              Sign out
-            </a>
-          </header>
-          <div class="app-body">
-            <div class="sidebar">
-              <nav class="sidebar-nav">
-                <ul class="nav">
-                  <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('main.member_page') }}">
-                      <i class="nav-icon icon-speedometer"></i> Dashboard
-                      <span class="badge badge-primary">NEW</span>
-                    </a>
-                  </li>
-                  <li class="nav-item nav-dropdown">
-                    <a class="nav-link nav-dropdown-toggle" href="#">
-                      <i class="nav-icon icon-bell"></i> My Account</a>
-                    <ul class="nav-dropdown-items">
-                      <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('main.user_profile_page') }}">
-                          <i class="nav-icon icon-drop"></i> Profile</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('security.change_password') }}">
-                          <i class="nav-icon icon-drop"></i> Password</a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="nav-item nav-dropdown">
-                    <a class="nav-link nav-dropdown-toggle" href="#">
-                      <i class="nav-icon fas fa-gears" aria-hidden="true"></i> Controller 2</a>
-                    <ul class="nav-dropdown-items">
-                      <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('controller2.sample_page') }}">
-                          <i class="nav-icon fas fa-book" aria-hidden="true"></i>&nbsp;Example</a>
-                      </li>
-                    </ul>
-                  </li>                  
-                  <li class="nav-title">Administration</li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('main.user_admin_page') }}">
-                      <i class="nav-icon icon-drop"></i> Manage Users</a>
-                  </li>
-                </ul>
-              </nav>
-            </div>
-          {% block pre_content %}{% endblock %}
-          <main class="main">
-          {# One-time system messages called Flash messages #}
+    <!-- Main wrapper -->
+    <div class="wrapper d-flex flex-column min-vh-100">
+
+      <!-- Header -->
+      <header class="header header-sticky p-0 mb-4">
+        <div class="container-fluid border-bottom px-4">
+          <button class="header-toggler" type="button"
+            onclick="coreui.Sidebar.getInstance(document.querySelector('#sidebar')).toggle()"
+            style="margin-inline-start: -14px;">
+            <svg class="icon icon-lg"><use href="{{ url_for('static', filename='icons/free.svg') }}#cil-menu"></use></svg>
+          </button>
+          <ul class="header-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('security.logout') }}">
+                <svg class="icon icon-lg"><use href="{{ url_for('static', filename='icons/free.svg') }}#cil-account-logout"></use></svg>
+                Sign out
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="container-fluid px-4">
+          {% block breadcrumb %}{% endblock %}
+        </div>
+      </header>
+
+      <!-- Page body -->
+      <div class="body flex-grow-1">
+        <div class="container-lg px-4">
+
+          {# Flash messages #}
           {% block flash_messages %}
-              {%- with messages = get_flashed_messages(with_categories=true) -%}
-                  {% if messages %}
-                      {% for category, message in messages %}
-                          {% if category=='error' %}
-                              {% set category='danger' %}
-                          {% endif %}
-                          <div style="margin-bottom: -2px;" role="alert" class="alert alert-{{category}} alert-dismissible fade show">{{ message|safe }}</div>
-                      {% endfor %}
-                  {% endif %}
-              {%- endwith %}
+            {%- with messages = get_flashed_messages(with_categories=true) -%}
+              {% if messages %}
+                {% for category, message in messages %}
+                  {% if category == 'error' %}{% set category = 'danger' %}{% endif %}
+                  <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message|safe }}
+                    <button type="button" class="btn-close" data-coreui-dismiss="alert" aria-label="Close"></button>
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {%- endwith %}
           {% endblock %}
 
           {% block content %}{% endblock %}
-          </main>
-          {% block post_content %}{% endblock %}
 
-        {% endblock %}
         </div>
-        <footer class="app-footer">
-          <div>FlaskDash &copy; 2022 Twin Tech Labs</div>
-          <div class="ml-auto">
-            <span>Powered by</span>
-            <a href="https://coreui.io">CoreUI</a>
-            <span>(&copy; 2018 creativeLabs.)</span>
-          </div>
-        </footer>
       </div>
-        <script>
-            // Hide loader
-            (function() {
-                $(".alert").fadeTo(4000, 500).slideUp(500, function(){
-                    $(".alert").slideUp(500);
-                });
-            })();
-        </script>
-    </body>
+
+      <!-- Footer -->
+      <footer class="footer px-4 py-3 border-top d-flex flex-wrap align-items-center">
+        <div>FlaskDash &copy; 2025 Twin Tech Labs</div>
+        <div class="ms-auto">
+          Powered by <a href="https://coreui.io">CoreUI</a>
+        </div>
+      </footer>
+
+    </div>
+    {% endblock %}
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/coreui.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/simplebar.min.js') }}"></script>
+    <script>
+      const header = document.querySelector('header.header');
+      document.addEventListener('scroll', () => {
+        if (header) {
+          header.classList.toggle('shadow-sm', document.documentElement.scrollTop > 0);
+        }
+      });
+    </script>
+    {% block scripts %}{% endblock %}
+  </body>
 </html>

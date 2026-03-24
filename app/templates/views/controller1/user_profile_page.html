@@ -1,45 +1,33 @@
-{% extends "common/dark_base.html" %}  {# common/page_base.html extends layout.html #}
+{% extends "common/dark_base.html" %}
 
-{% block content %}
-
-{% from "common/form_macros.html" import render_field, render_submit_field %}
-  <!-- Breadcrumb-->
-  <ol class="breadcrumb">
+{% block breadcrumb %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb my-0">
     <li class="breadcrumb-item">Home</li>
     <li class="breadcrumb-item">My Account</li>
     <li class="breadcrumb-item active">User Profile</li>
-    <!-- Breadcrumb Menu-->
-    <li class="breadcrumb-menu d-md-down-none">
-      <div class="btn-group" role="group" aria-label="Button group">
-        <a class="btn" href="#">
-          <i class="icon-speech"></i>
-        </a>
-        <a class="btn" href="./">
-          <i class="icon-graph"></i>  Dashboard</a>
-        <a class="btn" href="#">
-          <i class="icon-settings"></i>  Settings</a>
-      </div>
-    </li>
   </ol>
-  <div class="container-fluid">
-    <div class="animated fadeIn">
-      <div class="card ">
-        <form action="" method="POST" class="form" role="form">
-          <div class="card-header ">
-            <strong>User Profile</strong>
-          </div>
-          <div class="card-body ">
-                {{ form.hidden_tag() }}
-                <div class="form-group ">
-                  <label for="nf-email ">Full Name</label>
-                  <input type="text" class="form-control" id="full_name" name="full_name" placeholder="Enter full name" value="{{current_user.full_name}}">
-                </div>
-          </div>
-          <div class="card-footer ">
-            <button type="submit " class="btn btn-sm btn-primary "><i class="far fa-circle-dot"></i> Submit</button>
-            <button type="reset " class="btn btn-sm btn-danger "><i class="fas fa-ban"></i> Reset</button>
-          </div>
-        </form>
+</nav>
+{% endblock %}
+
+{% block content %}
+{% from "common/form_macros.html" import render_field, render_submit_field %}
+<div class="card">
+  <form action="" method="POST" class="form" role="form">
+    <div class="card-header">
+      <strong>User Profile</strong>
+    </div>
+    <div class="card-body">
+      {{ form.hidden_tag() }}
+      <div class="mb-3">
+        <label for="full_name" class="form-label">Full Name</label>
+        <input type="text" class="form-control" id="full_name" name="full_name" placeholder="Enter full name" value="{{ current_user.full_name }}">
       </div>
+    </div>
+    <div class="card-footer">
+      <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+      <button type="reset" class="btn btn-sm btn-danger">Reset</button>
+    </div>
+  </form>
 </div>
 {% endblock %}

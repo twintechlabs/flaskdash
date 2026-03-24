@@ -1,11 +1,11 @@
-# FlaskDash starter app v2.0
+# FlaskDash starter app v3.0
 
 ![Screenshot](https://github.com/twintechlabs/flaskdash/blob/master/app/static/images/screenshot.png)
 
 This code base serves as a starting point for writing your next Flask application.
 
 It's based on the awesome work of Ling Thio and includes the open source
-CoreUI admin Bootstrap theme and a number of enhancements to the base Flask
+CoreUI v5 admin Bootstrap 5 theme and a number of enhancements to the base Flask
 starter app including basic user management and a separate view file for
 API code.
 
@@ -23,6 +23,18 @@ API code.
 * Includes test framework (`pytest` and `tox`)
 * Includes database migration framework (`Flask-Migrate` / `alembic`)
 * Sends error emails to admins for unhandled exceptions
+
+## What's new in v3.0
+
+* Upgraded from CoreUI v4 (Bootstrap 4) to **CoreUI v5 (Bootstrap 5)**
+* Replaced jQuery with vanilla JavaScript throughout
+* Replaced Highcharts with **Chart.js v4** for dashboard charts
+* Replaced font-based icon libraries (Font Awesome, Simple Line Icons) with **CoreUI SVG icon sprites** (`free.svg`, `brand.svg`, `flag.svg`)
+* Replaced `perfect-scrollbar` with **SimpleBar**
+* Dark/light/auto color mode support via CoreUI v5's built-in theme switcher
+* Removed all legacy static assets (Bootstrap 4, jQuery, Highcharts, Popper.js, Pace, old icon fonts)
+* Breadcrumbs now rendered in the sticky header via a Jinja2 `breadcrumb` block
+* Flash message dismissal now uses `data-coreui-dismiss="alert"` (no JavaScript required)
 
 
 ## Setting up a development environment
@@ -125,7 +137,10 @@ delete the SQLite DB file `app.sqlite` and re-run `flask init-db`.
 
 ## Key dependencies
 
-* [CoreUI](https://coreui.io/)
+* [CoreUI v5](https://coreui.io/)
+* [Bootstrap 5](https://getbootstrap.com/)
+* [Chart.js](https://www.chartjs.org/)
+* [SimpleBar](https://github.com/Grsmto/simplebar)
 * [Flask](https://flask.palletsprojects.com/)
 * [Flask-Login](https://flask-login.readthedocs.io/)
 * [Flask-Migrate](https://flask-migrate.readthedocs.io/)
